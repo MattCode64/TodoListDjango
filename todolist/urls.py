@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.views.decorators.csrf import csrf_exempt
 
 import tasks.views as views
 
@@ -24,7 +25,7 @@ urlpatterns = [
     path('add-collection/', views.add_collection, name='add-collection'),
     path('delete-task/<int:task_pk>', views.delete_task, name='delete-task'),
     path('delete-collection/<int:collection_pk>', views.delete_collection, name='delete-collection'),
-    path('add-task/', views.add_task, name='add-task'),
+    path('add-task/', csrf_exempt(views.add_task), name='add-task'),
     path('get-tasks/<int:collection_pk>/', views.get_tasks, name='get-tasks'),
     path('admin/', admin.site.urls),
 ]

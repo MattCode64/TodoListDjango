@@ -41,6 +41,7 @@ def add_task(request):
     collection = Collection.objects.get(slug=request.POST.get("collection"))
     description = escape(request.POST.get('task-description'))
     task = Task.objects.create(description=description, collections=collection)
+    print(task)
     return render(request, 'tasks/task.html', context={'task': task})
 
 
