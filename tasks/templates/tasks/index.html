@@ -21,8 +21,7 @@
     <button hx-post="{% url 'add-collection' %}"
             hx-target="#collections"
             hx-swap="beforeend"
-            type="submit">Ajouter
-    </button>
+            type="submit">Ajouter</button>
 </form>
 
 <form method="post">
@@ -32,20 +31,19 @@
             hx-target="#tasks"
             hx-vals="js:{collection: getCollectionFromURL()}"
             hx-swap="beforeend"
-            type="submit">
-        Ajouter
-    </button>
+            type="submit">Ajouter</button>
 </form>
+
 
 <div id="tasks">
     {% for task in tasks %}
-        {% include 'tasks/task.html' %}
+        {% include 'tasks/tasks.html' with tasks=tasks collection=collection %}
     {% endfor %}
 </div>
 
 
 <script>
-    document.body.addEventListener("htmx:repsonseError", function (event) {
+    document.body.addEventListener("htmx:responseError", function (event) {
         alert(event.detail.xhr.responseText);
     })
 
