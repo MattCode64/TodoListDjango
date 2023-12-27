@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Todolist - Matthieu Freire</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+<body>
+<h1>Todolist</h1>
+
+
+<div id="collections">
+    {% for collection in collections %}
+        <button hx-get="{% url 'get-tasks' collection.pk %}"
+                hx-push-url="?collection={{ collection.slug }}"
+                hx-vals="{'collection': 'courses'}"
+                hx-target="#tasks">{{ collection.name }}</button>
+    {% endfor %}
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="collection-name">
+    <button hx-post="{% url 'add-collection' %}"
+            hx-target="#collections"
+            hx-swap="beforeend"
+            type="submit">Ajouter
+    </button>
+</form>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="task-description">
+    <button hx-post="{% url 'add-task' %}"
+            hx-target="#tasks"
+            hx-vals="js:{collection: getCollectionFromURL()}"
+            hx-swap="beforeend"
+            type="submit">
+        Ajouter
+    </button>
+</form>
+
+<div id="tasks">
+    {% for task in tasks %}
+        {% include 'tasks/task.html' %}
+    {% endfor %}
+</div>
+
+
+<script>
+    document.body.addEventListener("htmx:repsonseError", function (event) {
+        alert(event.detail.xhr.responseText);
+    })
+
+
+    function getCollectionFromURL() {
+        let url = new URL(window.location.href);
+        let searchParams = url.searchParams;
+        return searchParams.get('collection');
+    }
+
+</script>
+
+</body>
+</html>
